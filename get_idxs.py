@@ -7,6 +7,9 @@ def condition(article):
 
 
 def main(article_dir, outfile):
+    """
+    Given an articles directory, and condition function, output list of article indices.
+    """
     all_idxs = os.listdir(article_dir)
     all_idxs = list(map(str, sorted(map(int, all_idxs))))
     

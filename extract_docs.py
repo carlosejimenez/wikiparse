@@ -7,7 +7,7 @@ words_split_re = re.compile(r'[^\w\-\']')
 
 
 def parse_all():
-    with open('output.xml', 'r') as infile:
+    with open(OUTPUT_DIR, 'r') as infile:
         article = []
         line = infile.readline()
         while line:
@@ -28,6 +28,7 @@ def parse_all():
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
+    parser.add_argument('-f', '--filename', type=str, help='Xml filename/path from wikiextractor.')
     parser.add_argument('-a', '--articles-dir', type=str, help='Articles directory path for output.')
     args = parser.parse_args()
     ARTICLES_DIR = os.path.abspath(args.articles_dir)
