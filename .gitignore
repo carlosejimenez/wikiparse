@@ -1,0 +1,6 @@
+*.bz2
+*.out
+*.xml
+*.json
+__pycache__/
+articles/
