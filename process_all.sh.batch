@@ -10,18 +10,18 @@
 #SBATCH --time=72:00:00
 #SBATCH --export=ALL
 
+ENWIKI_LINK=https://dumps.wikimedia.org/enwiki/20200220/enwiki-20200220-pages-articles-multistream14.xml-p7697595p7744800.bz2 
 ARTICLES_DIR=./articles
 ENWIKI_PATH=./wikiextractor/enwiki.xml.bz2
 XML_DOC=./output.xml
 IDXS=./all_idxs.txt
 PARSED_DIR=./parsed_output
-
-ENWIKI_LINK=https://dumps.wikimedia.org/enwiki/20200220/enwiki-20200220-pages-articles-multistream14.xml-p7697595p7744800.bz2 
+CPU_COUNT=28
 
 wget $ENWIKI_LINK -O $ENWIKI_PATH
 bzcat $ENWIKI_PATH | python3 ./wikiextractor/WikiExtractor.py - --no_templates -o - > $XML_DOC
 python extract_docs.py -a $ARTICLES_DIR
 python get_idxs.py -a $ARTICLES_DIR -o $IDXS
 python -m spacy download en_core_web_lg
-python run_parser.py -a $ARTICLES_DIR --idx-filename $IDXS --output-dir $PARSED_DIR --cpu-count 2
+python run_parser.py -a $ARTICLES_DIR --idx-filename $IDXS --output-dir $PARSED_DIR --cpu-count $CPU_COUNT
 
