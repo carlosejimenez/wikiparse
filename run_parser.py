@@ -59,6 +59,6 @@ if __name__ == '__main__':
     ARTICLES_DIR = os.path.abspath(args.articles_dir)
     INIT = datetime.now()
     os.makedirs(ROOT, exist_ok=True)
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO)
     main(args.idx_filename, args.cpu_count)
     logging.info(f'Total time: %d seconds ...', (datetime.now() - INIT).seconds)
