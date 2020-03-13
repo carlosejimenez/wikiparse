@@ -5,21 +5,49 @@ import logging
 from multiprocessing import Pool
 import numpy as np
 import spacy
+import ujson
 import utils
 
 
+def format_output(doc):
+    """
+    Return a json string of the parsed values. Ex. tuple of list of verbs in sentences.
+    Args:
+        doc: spacy Doc type, with sents attribute.
+    Returns:
+        tuple of json-strings.
+    """
+    sentences = []
+    for sent in doc.sents:
+        verbs = [w.text for w in sent if w.pos_ == 'VERB']
+        sentences.append(ujson.dumps(verbs))
+    return tuple(sentences)
+
+
 def run(thread_idxs):
+    """
+    For a single thread, extracts parsed relationships as lists of ujson strings. Saved to
+    OUTPUTDIR/output_thread_num.json
+
+    Args:
+        thread_idxs (tuple): tuples of (thread_number, [idxs]) with thread_number used in conjunction with
+        multiprocessing.Pool, to separate output for each thread. [idxs] is an iterable of article numbers as files in
+        ARTICLES_DIR/. [idx] is a unique list for each thread_number.
+
+    Returns:
+        Time calculated to process all assigned articles.
+    """
     thread_number, idxs = thread_idxs
     nlp = spacy.load('en_core_web_lg')
     start = datetime.now()
     total_idxs = len(idxs)
-    outfile = open(ROOT + '/output_' + str(thread_number) + '.json', 'w+')
+    outfile = open(ROOT + '/output_' + str(thread_number) + '.json', 'w')
     outfile.write('[')
     line_buffer = []
     for i_x, (_, article) in enumerate(utils.gen_articles_form_list(ARTICLES_DIR, idxs)):
         if article:
             parsed_article = nlp(article)
-            line_buffer.extend(utils.format_output(parsed_article))
+            line_buffer.extend(format_output(parsed_article))
             if (i_x + 1) % 5000 == 0:
                 if line_buffer:
                     outfile.write(','.join(line_buffer))

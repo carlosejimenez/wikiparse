@@ -12,7 +12,7 @@ def main(article_dir, outfile):
     
     valid_idxs = [idx for idx in all_idxs if condition(open(article_dir + '/' + idx, 'r').read())]
 
-    with open(outfile, 'w+') as output:
+    with open(outfile, 'w') as output:
         output.write('\n'.join(valid_idxs))
 
 

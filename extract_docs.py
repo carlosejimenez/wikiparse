@@ -1,3 +1,4 @@
+import argparse
 import re
 import os
 
@@ -16,7 +17,7 @@ def parse_all():
                 # url = url.strip('"')
                 # title = title.strip('"')
             elif line.startswith('</doc>'):
-                with open('./articles/' + str(idx), 'w+') as outfile:
+                with open(ARTICLES_DIR + '/' + str(idx), 'w') as outfile:
                     outfile.write(' '.join(article))
                 article = []
             else:
@@ -26,6 +27,10 @@ def parse_all():
 
 
 if __name__ == '__main__':
-    os.makedirs('./articles', exist_ok=True)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-a', '--articles-dir', type=str, help='Articles directory path for output.')
+    args = parser.parse_args()
+    ARTICLES_DIR = os.path.abspath(args.articles_dir)
+    os.makedirs(ARTICLES_DIR, exist_ok=True)
     parse_all()
 

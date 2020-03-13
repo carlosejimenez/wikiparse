@@ -13,6 +13,7 @@
 wget https://dumps.wikimedia.org/enwiki/20200220/enwiki-20200220-pages-articles-multistream14.xml-p7697595p7744800.bz2 -O ./wikiextractor/enwikidata.xml.bz2 && 
 bzcat ./wikiextractor/enwikidata.xml.bz2 | python3 ./wikiextractor/WikiExtractor.py - --no_templates -o - > output.xml &&
 python extract_docs.py &&
-python get_idxs.py -a ./articles -o all_idxs.txt
+python get_idxs.py -a ./articles -o all_idxs.txt &&
+python -m spacy download en_core_web_lg
 python run_parser.py -a ./articles --idx-filename all_idxs.txt --output-dir output_dir --cpu-count 2
 
